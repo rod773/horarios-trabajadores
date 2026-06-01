@@ -1,0 +1,106 @@
+crea un proyecto nextjs con shadcn , framer motion,
+gsap, scroll trigger, scroll reveal animatejs
+
+con las siguientes caracteristicas:
+
+crea un prompt para una aplicacion de horario de trabajo de los trabajadores
+
+
+crea una aplicacion de horario de trabajo de los trabajadores (web app)
+- Idioma: Español
+- Tech stack: Next.js (App Router) + TypeScript + TailwindCSS + shadcn/ui
+- Animaciones: Framer Motion + GSAP (ScrollTrigger y ScrollReveal/scroll reveal) + Animate.js (opcional para micro-animaciones)
+- Requerimientos: implementación clara, UI moderna, validaciones, formularios, calendario/gestión de turnos y un flujo completo.
+
+FUNCIONALIDADES PRINCIPALES
+1) Autenticación y roles
+- Roles: Admin, Supervisor, Trabajador
+- Admin/Supervisor pueden crear/editar turnos y gestionar trabajadores
+- Trabajador solo puede ver su horario y solicitar cambios
+
+2) Gestión de trabajadores
+- CRUD de trabajadores (nombre, email, rol, horas semanales objetivo)
+- Asignación opcional a equipos/áreas
+- Listado con filtros y paginación
+
+3) Horario (turnos) por semana
+- Vista semanal por trabajador (y también vista por equipo/área)
+- Crear turno con:
+  - Fecha (día dentro de la semana)
+  - Hora inicio y hora fin
+  - Tipo de turno (Normal, Descanso, Vacaciones, Extra)
+  - Observaciones
+- Validaciones:
+  - hora fin > hora inicio
+  - no permitir solapamientos del mismo trabajador en la misma fecha (con tolerancia configurable)
+  - respetar límites opcionales (p.ej. máximo 12h/día, máximo horas/semana)
+- Edición y eliminación de turnos con confirmación
+
+4) Solicitudes de cambios
+- Trabajador puede enviar solicitud para:
+  - intercambio de turno (indicando turno a cambiar y turno propuesto)
+  - cambio de horario / ajuste de horas
+  - solicitud de vacaciones
+- Supervisor responde:
+  - Aprobado / Rechazado
+- Auditoría básica: fecha de solicitud, usuario, motivo
+
+5) Reportes y exportación
+- Resumen por trabajador:
+  - horas totales por semana y por mes
+  - horas por tipo de turno
+  - horas extra (si aplica)
+- Exportación a PDF o CSV (mínimo CSV) del rango seleccionado
+- Gráficas simples (opcional) con datos agregados
+
+6) Calendario visual
+- Tarjetas/blocks de turnos en la vista semanal
+- Estado visual por tipo de turno (colores)
+- Modal para ver detalles del turno al hacer clic
+
+REQUISITOS DE UI/UX
+- Layout:
+  - Sidebar de navegación (Dashboard, Trabajadores, Horarios, Solicitudes, Reportes)
+  - Topbar con buscador y selector de semana
+- Componentes con shadcn/ui:
+  - Table, Dialog, Modal, Calendar (o date picker), Tabs, Badge, Card, Input, Select, Checkbox, Toast
+- Validaciones con Zod + React Hook Form
+- Manejo de estados y loading skeletons
+- Animaciones:
+  - Transiciones en navegación y modales con Framer Motion
+  - Efectos de scroll: animar secciones al entrar en viewport (ScrollTrigger)
+  - Micro-interacciones (hover/tap) con Animate.js/Framer
+- Accesibilidad: focus visible, roles ARIA cuando aplique
+
+PERSISTENCIA / DATA
+- Opción recomendada: Prisma + PostgreSQL (o SQLite para demo)
+- Entidades (modelo conceptual):
+  - User (id, nombre, email, rol, equipo)
+  - WorkerProfile (id, userId, horasObjetivoSemanal)
+  - Shift (id, workerId, date, startTime, endTime, shiftType, notes)
+  - ShiftRequest (id, requesterId, fromShiftId, toShiftProposed?, requestType, status, reason, createdAt, resolvedAt, resolvedById)
+  - AuditLog (id, actorId, action, entityType, entityId, createdAt)
+- Rutas API/Server Actions:
+  - /api/auth/login, /api/workers, /api/shifts, /api/requests, /api/reports
+- Seguridad:
+  - RLS/validación a nivel servidor según rol
+
+ENTREGABLES
+- Estructura de proyecto lista para ejecutar
+- Código completo del frontend (y backend si aplica con Next API/Prisma)
+- Mínimo:
+  - Pantallas: Login, Dashboard, Trabajadores, Horarios (Semana), Solicitudes, Reportes
+  - CRUD de trabajadores y turnos
+  - Flujo de solicitud y aprobación/rechazo
+  - Exportación CSV
+- Incluye seed script con datos de ejemplo (2-3 equipos, 5-10 trabajadores, turnos de una semana)
+- README con instrucciones:
+  - npm install
+  - configuración .env (DB)
+  - npm run dev
+- Estilo visual consistente y responsive (móvil/tablet/desktop)
+
+EXTRA (deseable)
+- Configuración de límites (max horas/día, min descanso) en una sección Admin
+- Notificaciones toast para acciones importantes
+- Barra de progreso de horas semanales del trabajador
