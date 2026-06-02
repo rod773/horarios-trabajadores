@@ -1,0 +1,146 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  SUPERVISOR
+  WORKER
+}
+
+enum ShiftType {
+  NORMAL
+  DESCANSO
+  VACACIONES
+  EXTRA
+}
+
+enum RequestType {
+  INTERCAMBIO
+  CAMBIO_HORARIO
+  VACACIONES
+}
+
+enum RequestStatus {
+  PENDIENTE
+  APROBADA
+  RECHAZADA
+}
+
+model User {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  email String @unique
+  name  String
+
+  role Role @default(WORKER)
+
+  workerProfile WorkerProfile?
+
+  auditLogs AuditLog[] @relation("AuditActor")
+
+  // Relación: turnos en los que el usuario es trabajador
+  shifts Shift[] @relation("WorkerShifts")
+
+  shiftRequestsRequested ShiftRequest[] @relation("ShiftRequestRequester")
+  shiftRequestsResolved  ShiftRequest[] @relation("ShiftRequestResolvedBy")
+
+  team String?
+
+  @@index([role])
+}
+
+model WorkerProfile {
+  id String @id @default(cuid())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  horasObjetivoSemanal Float
+}
+
+model Shift {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  workerId String
+  worker   User    @relation("WorkerShifts", fields: [workerId], references: [id], onDelete: Cascade)
+
+  // Usaremos la fecha (hora a 00:00:00.000Z) para consistencia.
+  date      DateTime
+  startTime DateTime
+  endTime   DateTime
+
+  shiftType ShiftType
+  notes     String?
+
+  shiftRequestsFrom ShiftRequest[] @relation("ShiftFrom")
+
+  // Relación inversa para toShiftProposed
+  shiftRequestsTo ShiftRequest[] @relation("ShiftTo")
+
+  @@index([workerId, date])
+  @@index([date])
+}
+
+model ShiftRequest {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  requesterId String
+  requester   User   @relation("ShiftRequestRequester", fields: [requesterId], references: [id], onDelete: Cascade)
+
+  fromShiftId String
+  fromShift   Shift  @relation("ShiftFrom", fields: [fromShiftId], references: [id], onDelete: Cascade)
+
+  toShiftProposedId String?
+  toShiftProposed   Shift? @relation("ShiftTo", fields: [toShiftProposedId], references: [id])
+
+  requestType RequestType
+  status       RequestStatus @default(PENDIENTE)
+
+  reason String
+
+  resolvedAt    DateTime?
+  resolvedById  String?
+
+  resolvedBy User? @relation("ShiftRequestResolvedBy", fields: [resolvedById], references: [id])
+
+  auditLogs AuditLog[]
+
+  @@index([requesterId, status])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  actorId String
+  actor   User   @relation("AuditActor", fields: [actorId], references: [id], onDelete: Cascade)
+
+  action     String
+  entityType String
+  entityId   String
+
+  shiftRequestId String?
+  shiftRequest   ShiftRequest? @relation(fields: [shiftRequestId], references: [id], onDelete: Cascade)
+
+  @@index([entityType, entityId])
+}
