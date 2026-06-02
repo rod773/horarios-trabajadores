@@ -1,9 +1,16 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/session";
 import { getRequests, getShifts, getUsers } from "@/lib/data";
 import { RequestForm, RequestsList } from "@/components/requests/request-form";
 import { FadeIn } from "@/components/animations/page-transition";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { noindexMetadata } from "@/lib/site";
+
+export const metadata: Metadata = noindexMetadata(
+  "Solicitudes",
+  "Gestiona los cambios de turno, ajustes y vacaciones.",
+);
 
 export default async function SolicitudesPage() {
   const user = await getCurrentUser();

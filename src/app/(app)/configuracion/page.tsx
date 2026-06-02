@@ -1,8 +1,15 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/session";
 import { getSettings } from "@/lib/data";
 import { SettingsForm } from "@/components/config/settings-form";
 import { FadeIn } from "@/components/animations/page-transition";
+import { noindexMetadata } from "@/lib/site";
+
+export const metadata: Metadata = noindexMetadata(
+  "Configuración",
+  "Ajusta los límites y validaciones del sistema.",
+);
 
 export default async function ConfiguracionPage() {
   const user = await getCurrentUser();

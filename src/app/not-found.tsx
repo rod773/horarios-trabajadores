@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
+import { noindexMetadata } from "@/lib/site";
+
+export const metadata: Metadata = noindexMetadata(
+  "Página no encontrada",
+  "La página que buscas no existe o ha sido movida.",
+);
 
 export default function NotFound() {
   return (

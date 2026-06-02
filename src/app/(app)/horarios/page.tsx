@@ -1,9 +1,16 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/session";
 import { getShifts, getUsers } from "@/lib/data";
 import { addDays, startOfWeek, toISODate } from "@/lib/utils";
 import { WeekScheduleView } from "@/components/shifts/week-schedule-view";
 import { FadeIn } from "@/components/animations/page-transition";
+import { noindexMetadata } from "@/lib/site";
+
+export const metadata: Metadata = noindexMetadata(
+  "Horarios",
+  "Planifica y visualiza los turnos del equipo por semana.",
+);
 
 export default async function HorariosPage({
   searchParams,

@@ -1,8 +1,15 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/session";
 import { getShifts, getUsers } from "@/lib/data";
 import { ReportsView } from "@/components/reports/reports-view";
 import { FadeIn } from "@/components/animations/page-transition";
+import { noindexMetadata } from "@/lib/site";
+
+export const metadata: Metadata = noindexMetadata(
+  "Reportes",
+  "Resumen de horas y turnos por trabajador.",
+);
 
 export default async function ReportesPage({
   searchParams,

@@ -1,8 +1,15 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/session";
 import { getUsers } from "@/lib/data";
 import { WorkersTable } from "@/components/workers/workers-table";
 import { FadeIn } from "@/components/animations/page-transition";
+import { noindexMetadata } from "@/lib/site";
+
+export const metadata: Metadata = noindexMetadata(
+  "Trabajadores",
+  "Gestiona los miembros del equipo, sus roles y horas objetivo.",
+);
 
 export default async function TrabajadoresPage() {
   const user = await getCurrentUser();

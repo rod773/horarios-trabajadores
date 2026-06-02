@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getCurrentUser } from "@/lib/session";
 import { getRequests, getShifts, getUsers } from "@/lib/data";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,7 +10,13 @@ import { GsapParallax } from "@/components/animations/gsap-reveal";
 import { ScrollRevealBox } from "@/components/animations/scroll-reveal";
 import { ROLE_LABELS, SHIFT_TYPE_COLORS, SHIFT_TYPE_LABELS, REQUEST_STATUS_LABELS, REQUEST_STATUS_COLORS } from "@/lib/types";
 import { diffHours, formatDate, formatHours, startOfWeek, addDays } from "@/lib/utils";
+import { noindexMetadata } from "@/lib/site";
 import { Calendar, ClipboardList, Users, AlertCircle, Briefcase, TrendingUp } from "lucide-react";
+
+export const metadata: Metadata = noindexMetadata(
+  "Dashboard",
+  "Resumen de turnos, horas trabajadas, equipo y solicitudes pendientes.",
+);
 
 function initials(name: string) {
   return name
