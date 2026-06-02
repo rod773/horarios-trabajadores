@@ -2,7 +2,6 @@ import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/session";
 import { getRequests, getShifts, getUsers } from "@/lib/data";
 import { RequestForm, RequestsList } from "@/components/requests/request-form";
-import { RequestFormWrapper } from "@/components/requests/request-form-wrapper";
 import { FadeIn } from "@/components/animations/page-transition";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -27,9 +26,7 @@ export default async function SolicitudesPage() {
         </div>
       </FadeIn>
 
-      <RequestFormWrapper>
-        {(open, setOpen) => <RequestForm shifts={shifts} currentUserId={user.id} open={open} onOpenChange={setOpen} />}
-      </RequestFormWrapper>
+      <RequestForm shifts={shifts} currentUserId={user.id} />
 
       <Tabs defaultValue={user.role === "WORKER" ? "mine" : "all"} className="w-full">
         <TabsList>

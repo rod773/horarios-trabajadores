@@ -58,14 +58,11 @@ function initials(name: string) {
 export function RequestForm({
   shifts,
   currentUserId,
-  open,
-  onOpenChange,
 }: {
   shifts: Shift[];
   currentUserId: string;
-  open: boolean;
-  onOpenChange: (o: boolean) => void;
 }) {
+  const [open, setOpen] = React.useState(false);
   const [pending, setPending] = React.useState(false);
   const form = useForm<RequestFormInput>({
     resolver: zodResolver(requestFormSchema),
@@ -96,12 +93,12 @@ export function RequestForm({
     }
     toast.success("Solicitud enviada");
     form.reset();
-    onOpenChange(false);
+    setOpen(false);
     router.refresh();
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>
           <Send className="h-4 w-4" />

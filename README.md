@@ -127,16 +127,24 @@ Abre [http://localhost:3000](http://localhost:3000). Serás redirigido a la pant
 
 ## Cuentas de demostración
 
-| Rol            | Email                    | Password   |
-| -------------- | ------------------------ | ---------- |
-| Administrador  | `admin@empresa.com`      | `admin123` |
-| Supervisor     | `supervisor@empresa.com` | `super123` |
+Las credenciales de demo están definidas en [`src/components/auth/login-form.tsx:17-19`](src/components/auth/login-form.tsx#L17-L19):
+
+| Rol            | Email                    | Password    |
+| -------------- | ------------------------ | ----------- |
+| Administrador  | `admin@empresa.com`      | `admin123`  |
+| Supervisor     | `supervisor@empresa.com` | `super123`  |
 | Trabajador     | `maria@empresa.com`      | `worker123` |
 | Trabajador     | `javier@empresa.com`     | `worker123` |
 | Trabajador     | `carla@empresa.com`      | `worker123` |
 | Trabajador     | `diego@empresa.com`      | `worker123` |
 | Trabajador     | `elena@empresa.com`      | `worker123` |
 | Trabajador     | `pablo@empresa.com`      | `worker123` |
+
+### Cómo iniciar sesión rápido
+
+En la pantalla de login, dentro de la sección **"Cuentas de demostración"**, haz clic en el botón **"Administrador"** para autocompletar exactamente `admin@empresa.com` / `admin123`. Luego resuelve el captcha (operación aritmética simple) y pulsa **Ingresar**. Debería funcionar a la primera.
+
+Lo mismo aplica para los botones **"Supervisor"** y **"Trabajador"**, que autocompletan sus credenciales correspondientes.
 
 ## Funcionalidades
 
