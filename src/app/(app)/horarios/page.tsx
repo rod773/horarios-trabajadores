@@ -41,7 +41,6 @@ export default async function HorariosPage({
         users={users}
         weekStart={weekStart}
         isAdmin={isAdmin}
-        currentUserId={user.id}
         filterWorkerId={params.worker}
         filterTeam={params.team}
       />

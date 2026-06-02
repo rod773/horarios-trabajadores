@@ -10,13 +10,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { settingsSchema, type SettingsInput } from "@/lib/validations";
+
 import { updateSettingsAction } from "@/app/actions";
 import type { AppSettings } from "@/lib/types";
 
 export function SettingsForm({ settings }: { settings: AppSettings }) {
   const [pending, setPending] = React.useState(false);
   const form = useForm<SettingsInput>({
-    resolver: zodResolver(settingsSchema),
+    resolver: zodResolver(settingsSchema) as any,
     defaultValues: {
       maxHorasPorDia: settings.maxHorasPorDia,
       maxHorasPorSemana: settings.maxHorasPorSemana,
@@ -26,6 +27,7 @@ export function SettingsForm({ settings }: { settings: AppSettings }) {
   });
 
   async function onSubmit(values: SettingsInput) {
+
     setPending(true);
     const fd = new FormData();
     Object.entries(values).forEach(([k, v]) => fd.append(k, String(v)));

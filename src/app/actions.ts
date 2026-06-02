@@ -58,7 +58,7 @@ export async function loginAction(_prev: ActionResult | undefined, formData: For
   if (!user) {
     return { ok: false, error: "Credenciales inválidas" };
   }
-  await login(user.email, parsed.data.password);
+  await login(user.email);
   redirect("/dashboard");
 }
 
@@ -83,8 +83,11 @@ export async function createWorkerAction(_prev: ActionResult | undefined, formDa
   }
   const password = (formData.get("password") as string) || "worker123";
   const u = createUser({
-    ...(parsed.data as any),
-    team: (parsed.data as any).team ?? null,
+    name: parsed.data.name,
+    email: parsed.data.email,
+    role: parsed.data.role,
+    team: parsed.data.team ?? null,
+    horasObjetivoSemanal: parsed.data.horasObjetivoSemanal,
     password,
   });
 
@@ -256,6 +259,8 @@ export async function updateSettingsAction(_prev: ActionResult | undefined, form
   revalidatePath("/configuracion");
   return { ok: true };
 }
+
+
 
 export async function computeWeekRange(start: Date) {
   const startDate = new Date(start);

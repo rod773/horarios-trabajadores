@@ -30,59 +30,88 @@ export function WorkerForm({
   const isEdit = !!worker;
 
   const form = useForm<WorkerFormInput>({
-    resolver: zodResolver(workerFormSchema),
+    resolver: zodResolver(workerFormSchema) as any,
     defaultValues: {
       name: worker?.name ?? "",
       email: worker?.email ?? "",
       role: (worker?.role ?? "WORKER") as WorkerFormInput["role"],
       team: worker?.team ?? "",
-      horasObjetivoSemanal: worker?.workerProfile?.horasObjetivoSemanal ?? 40,
+      horasObjetivoSemanal:
+        worker?.workerProfile?.horasObjetivoSemanal ?? 40,
     },
   });
 
-  async function onSubmit(values: WorkerFormInput) {
+  const onSubmit = async (values: WorkerFormInput) => {
     setPending(true);
     const fd = new FormData();
+
     Object.entries(values).forEach(([k, v]) => {
       if (v !== null && v !== undefined) fd.append(k, String(v));
     });
+
     if (!isEdit) {
       fd.append("password", "worker123");
     }
+
     const action = isEdit
       ? await updateWorkerAction(worker!.id, undefined, fd)
       : await createWorkerAction(undefined, fd);
+
     setPending(false);
+
     if (!action.ok) {
       toast.error(action.error);
       return;
     }
-    toast.success(isEdit ? "Trabajador actualizado" : "Trabajador creado");
+
+    toast.success(
+      isEdit ? "Trabajador actualizado" : "Trabajador creado"
+    );
     onDone?.();
-  }
+  };
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+    <form
+      onSubmit={form.handleSubmit(onSubmit as any)}
+      className="space-y-4"
+    >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="name">Nombre completo</Label>
-          <Input id="name" {...form.register("name")} aria-invalid={!!form.formState.errors.name} />
+          <Input
+            id="name"
+            {...form.register("name")}
+            aria-invalid={!!form.formState.errors.name}
+          />
           {form.formState.errors.name && (
-            <p className="text-xs text-destructive">{form.formState.errors.name.message}</p>
+            <p className="text-xs text-destructive">
+              {form.formState.errors.name.message}
+            </p>
           )}
         </div>
+
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" {...form.register("email")} aria-invalid={!!form.formState.errors.email} />
+          <Input
+            id="email"
+            type="email"
+            {...form.register("email")}
+            aria-invalid={!!form.formState.errors.email}
+          />
           {form.formState.errors.email && (
-            <p className="text-xs text-destructive">{form.formState.errors.email.message}</p>
+            <p className="text-xs text-destructive">
+              {form.formState.errors.email.message}
+            </p>
           )}
         </div>
+
         <div className="space-y-2">
           <Label htmlFor="role">Rol</Label>
           <Select
             value={form.watch("role")}
-            onValueChange={(v) => form.setValue("role", v as WorkerFormInput["role"])}
+            onValueChange={(v) =>
+              form.setValue("role", v as WorkerFormInput["role"])
+            }
           >
             <SelectTrigger id="role">
               <SelectValue />
@@ -94,10 +123,12 @@ export function WorkerForm({
             </SelectContent>
           </Select>
         </div>
+
         <div className="space-y-2">
           <Label htmlFor="team">Equipo / área</Label>
           <Input id="team" placeholder="Ej. Equipo A" {...form.register("team")} />
         </div>
+
         <div className="space-y-2 sm:col-span-2">
           <Label htmlFor="horas">Horas objetivo semanales</Label>
           <Input
@@ -109,13 +140,20 @@ export function WorkerForm({
             {...form.register("horasObjetivoSemanal", { valueAsNumber: true })}
           />
           {form.formState.errors.horasObjetivoSemanal && (
-            <p className="text-xs text-destructive">{form.formState.errors.horasObjetivoSemanal.message}</p>
+            <p className="text-xs text-destructive">
+              {form.formState.errors.horasObjetivoSemanal.message}
+            </p>
           )}
         </div>
       </div>
+
       <div className="flex justify-end gap-2 pt-2">
         <Button type="submit" disabled={pending}>
-          {pending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+          {pending ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Save className="h-4 w-4" />
+          )}
           {isEdit ? "Guardar cambios" : "Crear trabajador"}
         </Button>
       </div>

@@ -28,7 +28,8 @@ export function ScrollRevealBox({
   const ref = React.useRef<HTMLElement | null>(null);
 
   React.useEffect(() => {
-    if (!ref.current) return;
+    const el = ref.current;
+    if (!el) return;
     const reduce =
       typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) return;
@@ -40,10 +41,10 @@ export function ScrollRevealBox({
       reset,
       easing: "cubic-bezier(0.16, 1, 0.3, 1)",
     });
-    sr.reveal(ref.current);
+    sr.reveal(el);
     return () => {
-      if (ref.current && (sr as unknown as { clean: (target: HTMLElement) => void }).clean) {
-        (sr as unknown as { clean: (target: HTMLElement) => void }).clean(ref.current);
+      if (el && (sr as unknown as { clean: (target: HTMLElement) => void }).clean) {
+        (sr as unknown as { clean: (target: HTMLElement) => void }).clean(el);
       }
     };
   }, [delay, distance, duration, origin, reset]);

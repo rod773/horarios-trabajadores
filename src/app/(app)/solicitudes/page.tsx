@@ -46,7 +46,6 @@ export default async function SolicitudesPage() {
               users={users}
               shifts={shifts}
               currentRole={user.role}
-              currentUserId={user.id}
             />
           </TabsContent>
         )}
@@ -56,7 +55,6 @@ export default async function SolicitudesPage() {
             users={users}
             shifts={shifts}
             currentRole={user.role}
-            currentUserId={user.id}
           />
         </TabsContent>
         <TabsContent value="pending" className="mt-4">
@@ -65,7 +63,6 @@ export default async function SolicitudesPage() {
             users={users}
             shifts={shifts}
             currentRole={user.role}
-            currentUserId={user.id}
           />
         </TabsContent>
       </Tabs>

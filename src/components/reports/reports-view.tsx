@@ -113,7 +113,7 @@ function downloadFile(filename: string, content: string, type: string) {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-export function ReportsView({ shifts, users, currentUser }: { shifts: Shift[]; users: User[]; currentUser: User }) {
+export function ReportsView({ shifts, users }: { shifts: Shift[]; users: User[]; currentUser: User }) {
   const router = useRouter();
   const sp = useSearchParams();
 

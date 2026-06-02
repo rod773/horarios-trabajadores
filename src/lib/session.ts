@@ -13,11 +13,9 @@ export async function getCurrentUser(): Promise<User | null> {
   return getUserById(session.value);
 }
 
-export async function login(email: string, password: string): Promise<User | null> {
+export async function login(email: string): Promise<User | null> {
   const user = getUserByEmail(email);
   if (!user) return null;
-  // In-memory password check happens in actions.ts to keep data store pure.
-  // Here we just set the cookie after the action validates.
   const store = await cookies();
   store.set(SESSION_COOKIE, user.id, {
     httpOnly: true,

@@ -13,7 +13,7 @@ export default async function ReportesPage({
   if (!user) redirect("/login");
   if (user.role === "WORKER") redirect("/dashboard");
 
-  const params = await searchParams;
+  await searchParams;
   const shifts = getShifts();
   const users = getUsers();
 

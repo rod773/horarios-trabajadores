@@ -4,7 +4,6 @@ import type {
   Shift,
   ShiftRequest,
   User,
-  WorkerProfile,
 } from "./types";
 import { addDays, startOfWeek, toISODate } from "./utils";
 
@@ -19,7 +18,6 @@ interface DataStore {
 }
 
 declare global {
-  // eslint-disable-next-line no-var
   var __APP_DATA__: DataStore | undefined;
 }
 

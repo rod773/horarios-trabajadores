@@ -7,7 +7,6 @@ import { Plus, ChevronLeft, ChevronRight, Calendar as CalendarIcon, Filter, List
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
 import {
   Dialog,
   DialogContent,
@@ -36,7 +35,6 @@ interface WeekViewProps {
   users: User[];
   weekStart: Date;
   isAdmin: boolean;
-  currentUserId: string;
   filterWorkerId?: string;
   filterTeam?: string;
 }
@@ -50,7 +48,6 @@ export function WeekScheduleView({
   users,
   weekStart,
   isAdmin,
-  currentUserId,
   filterWorkerId,
   filterTeam,
 }: WeekViewProps) {

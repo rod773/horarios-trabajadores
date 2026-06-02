@@ -20,6 +20,7 @@ export interface User {
   team: string | null;
   workerProfile: WorkerProfile | null;
   createdAt: string;
+  updatedAt?: string;
 }
 
 export interface Shift {

@@ -208,17 +208,14 @@ export function RequestsList({
   users,
   shifts,
   currentRole,
-  currentUserId,
 }: {
   requests: ShiftRequest[];
   users: User[];
   shifts: Shift[];
   currentRole: string;
-  currentUserId: string;
 }) {
   const router = useRouter();
   const [pending, setPending] = React.useState<string | null>(null);
-  const [openCreate, setOpenCreate] = React.useState(false);
 
   async function resolve(id: string, status: "APROBADA" | "RECHAZADA") {
     setPending(id);

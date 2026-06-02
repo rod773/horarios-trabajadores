@@ -14,7 +14,7 @@ export async function POST(request: Request) {
   if (!user) {
     return NextResponse.json({ ok: false, error: "Credenciales inválidas" }, { status: 401 });
   }
-  await login(user.email, parsed.data.password);
+  await login(user.email);
   return NextResponse.json({ ok: true, user: { id: user.id, name: user.name, role: user.role } });
 }
 
