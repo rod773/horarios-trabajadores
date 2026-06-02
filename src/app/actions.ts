@@ -65,8 +65,15 @@ export async function loginAction(_prev: ActionResult | undefined, formData: For
   if (!user) {
     return { ok: false, error: "Credenciales inválidas" };
   }
-  await login(user.email);
-  redirect("/dashboard");
+  try {
+    const logged = await login(user.email);
+    if (!logged) {
+      return { ok: false, error: "Error de autenticación (JWT_SECRET no configurado)" };
+    }
+    redirect("/dashboard");
+  } catch {
+    return { ok: false, error: "Error de autenticación" };
+  }
 }
 
 export async function logoutAction() {

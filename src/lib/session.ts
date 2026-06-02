@@ -20,9 +20,9 @@ interface JwtPayload {
   name: string;
 }
 
-export async function signToken(payload: JwtPayload) {
+export async function signToken(payload: JwtPayload): Promise<string | null> {
   const secret = getSecret();
-  if (!secret) throw new Error("JWT_SECRET no está configurado");
+  if (!secret) return null;
 
   return new SignJWT({ ...payload })
     .setProtectedHeader({ alg: "HS256" })
@@ -64,6 +64,8 @@ export async function login(email: string): Promise<User | null> {
     email: user.email,
     name: user.name,
   });
+
+  if (!token) return null;
 
   const store = await cookies();
   store.set(SESSION_COOKIE, token, {

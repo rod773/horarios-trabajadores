@@ -56,13 +56,19 @@ export function LoginForm({ captchaExpression: initialExpression, captchaToken: 
     fd.append("password", values.password);
     fd.append("captchaToken", values.captchaToken);
     fd.append("captchaAnswer", values.captchaAnswer);
+
     const result = await loginAction(undefined, fd);
+
     if (result && "ok" in result && !result.ok) {
       setError(result.error);
       toast.error(result.error);
       setPending(false);
       await refreshCaptcha();
+      return;
     }
+
+    // When invoking server actions imperatively, Next may not perform the redirect reliably.
+    window.location.href = "/dashboard";
   }
 
   function fillAccount(email: string, password: string) {

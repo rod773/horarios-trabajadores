@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import ScrollReveal from "scrollreveal";
 import { cn } from "@/lib/utils";
 
 export interface ScrollRevealProps {
@@ -33,19 +32,29 @@ export function ScrollRevealBox({
     const reduce =
       typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) return;
-    const sr = ScrollReveal({
-      distance,
-      duration,
-      delay,
-      origin,
-      reset,
-      easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+    let cleanup: (() => void) | undefined;
+    let cancelled = false;
+    import("scrollreveal").then((mod) => {
+      if (cancelled) return;
+      const ScrollReveal = mod.default;
+      const sr = ScrollReveal({
+        distance,
+        duration,
+        delay,
+        origin,
+        reset,
+        easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+      });
+      sr.reveal(el);
+      cleanup = () => {
+        if (el && (sr as unknown as { clean: (target: HTMLElement) => void }).clean) {
+          (sr as unknown as { clean: (target: HTMLElement) => void }).clean(el);
+        }
+      };
     });
-    sr.reveal(el);
     return () => {
-      if (el && (sr as unknown as { clean: (target: HTMLElement) => void }).clean) {
-        (sr as unknown as { clean: (target: HTMLElement) => void }).clean(el);
-      }
+      cancelled = true;
+      cleanup?.();
     };
   }, [delay, distance, duration, origin, reset]);
 
