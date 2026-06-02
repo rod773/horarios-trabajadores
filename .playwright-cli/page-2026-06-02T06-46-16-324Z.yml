@@ -1,0 +1,35 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e6]:
+    - generic [ref=e7]:
+      - img [ref=e9]
+      - generic [ref=e12]:
+        - generic [ref=e13]: Bienvenido de vuelta
+        - generic [ref=e14]: Ingresa tus credenciales para acceder al sistema
+    - generic [ref=e15]:
+      - generic [ref=e16]:
+        - generic [ref=e17]:
+          - text: Email
+          - textbox "Email" [ref=e18]:
+            - /placeholder: tu@empresa.com
+        - generic [ref=e19]:
+          - text: Contraseña
+          - textbox "Contraseña" [ref=e20]:
+            - /placeholder: ••••••••
+        - generic [ref=e21]:
+          - text: Verificación de seguridad
+          - generic [ref=e22]:
+            - generic [ref=e23]: 10 + 34
+            - button "Nuevo captcha" [ref=e24]:
+              - img [ref=e25]
+          - textbox "Escribe el resultado" [ref=e30]
+        - button "Ingresar" [ref=e31] [cursor=pointer]:
+          - img
+          - text: Ingresar
+      - generic [ref=e32]:
+        - paragraph [ref=e33]: Cuentas de demostración
+        - generic [ref=e34]:
+          - button "Administradoradmin@empresa.com" [ref=e35] [cursor=pointer]
+          - button "Supervisorsupervisor@empresa.com" [ref=e36] [cursor=pointer]
+          - button "Trabajadormaria@empresa.com" [ref=e37] [cursor=pointer]
+  - region "Notifications alt+T"
+  - alert [ref=e38]
