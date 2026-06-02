@@ -70,10 +70,11 @@ export async function loginAction(_prev: ActionResult | undefined, formData: For
     if (!logged) {
       return { ok: false, error: "Error de autenticación (JWT_SECRET no configurado)" };
     }
-    redirect("/dashboard");
   } catch {
     return { ok: false, error: "Error de autenticación" };
   }
+
+  redirect("/dashboard");
 }
 
 export async function logoutAction() {
