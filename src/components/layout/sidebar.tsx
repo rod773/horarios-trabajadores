@@ -70,7 +70,7 @@ export function Sidebar({ role, collapsed, onClose }: { role: Role; collapsed: b
               href={item.href}
               onClick={onClose}
               className={cn(
-                "group relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                "group relative flex items-center gap-3 rounded-lg px-3 min-h-[40px] sm:min-h-0 sm:py-2 text-sm font-medium transition-colors",
                 active
                   ? "bg-primary text-primary-foreground shadow-sm"
                   : "text-muted-foreground hover:bg-accent hover:text-foreground",
@@ -95,7 +95,7 @@ export function Sidebar({ role, collapsed, onClose }: { role: Role; collapsed: b
           <button
             type="submit"
             className={cn(
-              "w-full flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors cursor-pointer",
+              "w-full flex items-center gap-3 rounded-lg px-3 min-h-[40px] sm:min-h-0 sm:py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors cursor-pointer",
               collapsed && "justify-center"
             )}
           >

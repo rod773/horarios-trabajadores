@@ -44,7 +44,8 @@ import {
   type ShiftRequest,
   type User,
 } from "@/lib/types";
-import { diffHours, formatDate } from "@/lib/utils";
+import { cn, diffHours, formatDate } from "@/lib/utils";
+
 
 function initials(name: string) {
   return name
@@ -256,20 +257,20 @@ export function RequestsList({
               transition={{ delay: i * 0.04, duration: 0.25 }}
             >
               <Card>
-                <CardHeader className="flex flex-row items-start justify-between gap-3 space-y-0 pb-2">
-                  <div className="flex items-start gap-3">
-                    <Avatar className="h-9 w-9">
+                <CardHeader className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-3 space-y-0 pb-2">
+                  <div className="flex items-start gap-3 min-w-0">
+                    <Avatar className="h-9 w-9 shrink-0">
                       <AvatarFallback>{requester ? initials(requester.name) : "?"}</AvatarFallback>
                     </Avatar>
-                    <div>
-                      <CardTitle className="text-base">{requester?.name ?? "Usuario"}</CardTitle>
+                    <div className="min-w-0">
+                      <CardTitle className="text-base truncate">{requester?.name ?? "Usuario"}</CardTitle>
                       <CardDescription className="text-xs">
                         {REQUEST_TYPE_LABELS[r.requestType]} ·{" "}
                         {formatDate(r.createdAt, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
                       </CardDescription>
                     </div>
                   </div>
-                  <Badge variant="outline" className={REQUEST_STATUS_COLORS[r.status]}>
+                  <Badge variant="outline" className={cn("self-start sm:self-auto shrink-0", REQUEST_STATUS_COLORS[r.status])}>
                     {REQUEST_STATUS_LABELS[r.status]}
                   </Badge>
                 </CardHeader>

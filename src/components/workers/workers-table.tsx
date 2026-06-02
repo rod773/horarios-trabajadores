@@ -75,23 +75,23 @@ export function WorkersTable({ workers }: { workers: User[] }) {
   return (
     <Card>
       <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 space-y-0">
-        <div>
+        <div className="min-w-0">
           <CardTitle>Trabajadores</CardTitle>
           <CardDescription>Gestiona los miembros del equipo y sus perfiles</CardDescription>
         </div>
-        <div className="flex items-center gap-2 w-full sm:w-auto">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
           <div className="relative flex-1 sm:flex-initial">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Buscar..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="pl-9 w-full sm:w-56"
+              className="pl-9 w-full sm:w-56 h-10 sm:h-9"
             />
           </div>
           <Dialog open={openCreate} onOpenChange={setOpenCreate}>
             <DialogTrigger asChild>
-              <Button>
+              <Button className="h-10 sm:h-9">
                 <Plus className="h-4 w-4" />
                 Nuevo
               </Button>
@@ -120,7 +120,7 @@ export function WorkersTable({ workers }: { workers: User[] }) {
             <p>No se encontraron trabajadores</p>
           </div>
         ) : (
-          <Table>
+          <Table className="min-w-[640px]">
             <TableHeader>
               <TableRow>
                 <TableHead>Nombre</TableHead>
@@ -128,7 +128,7 @@ export function WorkersTable({ workers }: { workers: User[] }) {
                 <TableHead className="hidden sm:table-cell">Rol</TableHead>
                 <TableHead className="hidden lg:table-cell">Equipo</TableHead>
                 <TableHead className="hidden lg:table-cell text-right">Horas/sem</TableHead>
-                <TableHead className="w-12 text-right" />
+                <TableHead className="w-14 text-right" />
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -142,12 +142,12 @@ export function WorkersTable({ workers }: { workers: User[] }) {
                 >
                   <TableCell>
                     <Link href={`/trabajadores/${w.id}`} className="flex items-center gap-3 group">
-                      <Avatar className="h-8 w-8">
+                      <Avatar className="h-8 w-8 shrink-0">
                         <AvatarFallback>{initials(w.name)}</AvatarFallback>
                       </Avatar>
-                      <div>
-                        <p className="text-sm font-medium group-hover:underline">{w.name}</p>
-                        <p className="text-xs text-muted-foreground md:hidden">{w.email}</p>
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium group-hover:underline truncate max-w-[180px]">{w.name}</p>
+                        <p className="text-xs text-muted-foreground md:hidden truncate max-w-[180px]">{w.email}</p>
                       </div>
                     </Link>
                   </TableCell>
@@ -164,7 +164,7 @@ export function WorkersTable({ workers }: { workers: User[] }) {
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Acciones">
+                        <Button variant="ghost" size="icon" className="h-10 w-10 sm:h-8 sm:w-8" aria-label="Acciones">
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>

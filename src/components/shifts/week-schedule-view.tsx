@@ -167,7 +167,7 @@ export function WeekScheduleView({
                 <Filter className="h-4 w-4" /> Filtros:
               </div>
               <Select value={filterWorkerId ?? "all"} onValueChange={(v) => setParam("worker", v)}>
-                <SelectTrigger className="w-48 h-8">
+                <SelectTrigger className="flex-1 sm:flex-initial sm:w-48 h-10 sm:h-9">
                   <SelectValue placeholder="Trabajador" />
                 </SelectTrigger>
                 <SelectContent>
@@ -183,7 +183,7 @@ export function WeekScheduleView({
               </Select>
               {teams.length > 0 && (
                 <Select value={filterTeam ?? "all"} onValueChange={(v) => setParam("team", v)}>
-                  <SelectTrigger className="w-40 h-8">
+                  <SelectTrigger className="flex-1 sm:flex-initial sm:w-40 h-10 sm:h-9">
                     <SelectValue placeholder="Equipo" />
                   </SelectTrigger>
                   <SelectContent>
@@ -196,7 +196,7 @@ export function WeekScheduleView({
                   </SelectContent>
                 </Select>
               )}
-              <div className="ml-auto flex items-center gap-3 text-xs text-muted-foreground">
+              <div className="flex w-full sm:w-auto sm:ml-auto items-center gap-2 sm:gap-3 text-xs text-muted-foreground flex-wrap">
                 <Badge variant="outline" className="font-normal">
                   {filtered.length} turnos
                 </Badge>
@@ -206,7 +206,7 @@ export function WeekScheduleView({
               </div>
             </div>
 
-            <StaggerChildren className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-2" delay={0.04}>
+            <StaggerChildren className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2" delay={0.04}>
               {days.map((d, i) => {
                 const dayShifts = shiftsForDay(d);
                 const isToday = toISODate(d) === toISODate(new Date());
@@ -263,7 +263,7 @@ export function WeekScheduleView({
                             type="button"
                             variant="ghost"
                             size="sm"
-                            className="w-full h-7 text-xs opacity-60 hover:opacity-100"
+                            className="w-full h-9 sm:h-7 text-xs opacity-60 hover:opacity-100"
                             onClick={() => {
                               setDefaultDate(toISODate(d));
                               setOpenCreate(true);

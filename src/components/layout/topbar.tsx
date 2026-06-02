@@ -40,7 +40,7 @@ export function Topbar({
 }: TopbarProps) {
   return (
     <header className="sticky top-0 z-30 bg-background/80 backdrop-blur border-b border-border">
-      <div className="flex items-center gap-2 sm:gap-3 px-3 sm:px-6 py-3">
+      <div className="flex flex-wrap items-center gap-2 sm:gap-3 px-3 sm:px-6 py-3">
         <Button
           type="button"
           variant="ghost"
@@ -57,18 +57,18 @@ export function Topbar({
             <CalendarDays className="h-4 w-4" />
             <span className="capitalize">{weekLabel}</span>
           </div>
-          <div className="hidden sm:flex items-center gap-1">
-            <Button type="button" variant="outline" size="icon" className="h-7 w-7" onClick={onPrevWeek} aria-label="Semana anterior">
+          <div className="flex items-center gap-1">
+            <Button type="button" variant="outline" size="icon" className="h-9 w-9 sm:h-8 sm:w-8" onClick={onPrevWeek} aria-label="Semana anterior">
               ‹
             </Button>
-            <Button type="button" variant="outline" size="icon" className="h-7 w-7" onClick={onNextWeek} aria-label="Semana siguiente">
+            <Button type="button" variant="outline" size="icon" className="h-9 w-9 sm:h-8 sm:w-8" onClick={onNextWeek} aria-label="Semana siguiente">
               ›
             </Button>
           </div>
         </div>
 
         {onSearchChange !== undefined && (
-          <div className="flex-1 max-w-md hidden md:flex relative">
+          <div className="flex-1 min-w-0 max-w-md hidden md:flex relative order-3 md:order-none w-full md:w-auto">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
@@ -80,13 +80,13 @@ export function Topbar({
           </div>
         )}
 
-        <div className="ml-auto flex items-center gap-3">
-          <div className="hidden sm:flex flex-col text-right leading-tight">
-            <span className="text-sm font-medium">{user.name}</span>
-            <span className="text-[11px] text-muted-foreground">{user.email}</span>
+        <div className="ml-auto flex items-center gap-2 sm:gap-3 flex-wrap">
+          <div className="hidden sm:flex flex-col text-right leading-tight min-w-0">
+            <span className="text-sm font-medium truncate max-w-[140px]">{user.name}</span>
+            <span className="text-[11px] text-muted-foreground truncate max-w-[140px]">{user.email}</span>
           </div>
           <div className="flex items-center gap-2">
-            <Avatar>
+            <Avatar className="h-9 w-9 sm:h-8 sm:w-8">
               <AvatarFallback>{initials(user.name)}</AvatarFallback>
             </Avatar>
             <Badge variant="outline" className="hidden sm:inline-flex">

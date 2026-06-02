@@ -55,28 +55,30 @@ export function ShiftBlock({ shift, worker, canEdit, onClick, onEdit, onDelete, 
             {SHIFT_TYPE_LABELS[shift.shiftType]}
           </p>
           {!isAllDay && (
-            <p className="mt-0.5 flex items-center gap-1 opacity-80">
-              <Clock className="h-3 w-3" />
-              {formatTime(shift.startTime)} – {formatTime(shift.endTime)}
+            <p className="mt-0.5 flex items-center gap-1 opacity-80 min-w-0">
+              <Clock className="h-3 w-3 shrink-0" />
+              <span className="truncate">
+                {formatTime(shift.startTime)} – {formatTime(shift.endTime)}
+              </span>
             </p>
           )}
           {!compact && worker && (
             <p className="mt-0.5 truncate opacity-70">{worker.name}</p>
           )}
           {!compact && (
-            <Badge variant="outline" className="mt-1.5 text-[10px] py-0">
+            <Badge variant="outline" className="mt-1.5 text-[11px] py-0">
               {Number.isInteger(hours) ? `${hours}h` : `${hours.toFixed(1)}h`}
             </Badge>
           )}
         </div>
         {canEdit && (
-          <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-0.5">
+          <div className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100 transition-opacity flex gap-0.5 shrink-0">
             {onEdit && (
               <Button
                 type="button"
                 size="icon"
                 variant="ghost"
-                className="h-6 w-6"
+                className="h-7 w-7 sm:h-6 sm:w-6"
                 onClick={(e) => {
                   e.stopPropagation();
                   onEdit();
@@ -91,7 +93,7 @@ export function ShiftBlock({ shift, worker, canEdit, onClick, onEdit, onDelete, 
                 type="button"
                 size="icon"
                 variant="ghost"
-                className="h-6 w-6 hover:text-destructive"
+                className="h-7 w-7 sm:h-6 sm:w-6 hover:text-destructive"
                 onClick={(e) => {
                   e.stopPropagation();
                   onDelete();

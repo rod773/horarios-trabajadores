@@ -294,28 +294,28 @@ export function ReportsView({ shifts, users }: { shifts: Shift[]; users: User[];
                       className="rounded-lg border p-3 hover:bg-muted/30 transition-colors"
                     >
                       <div className="flex items-center justify-between gap-3 mb-2">
-                        <div>
-                          <p className="font-medium text-sm">{r.workerName}</p>
-                          <p className="text-xs text-muted-foreground">{ROLE_LABELS[user?.role ?? "WORKER"]} · {r.shiftCount} turnos</p>
+                        <div className="min-w-0">
+                          <p className="font-medium text-sm truncate">{r.workerName}</p>
+                          <p className="text-xs text-muted-foreground truncate">{ROLE_LABELS[user?.role ?? "WORKER"]} · {r.shiftCount} turnos</p>
                         </div>
-                        <div className="text-right">
+                        <div className="text-right shrink-0">
                           <p className="font-semibold tabular-nums">{formatHours(r.totalHours)}</p>
                           {user?.role === "WORKER" && (
                             <p className="text-[11px] text-muted-foreground">/ {targetHours}h semana</p>
                           )}
                         </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Progress value={Math.min(100, (r.totalHours / maxHours) * 100)} className="h-1.5" />
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <Progress value={Math.min(100, (r.totalHours / maxHours) * 100)} className="h-1.5 flex-1 min-w-[100px]" />
                         <div className="flex flex-wrap gap-1">
                           {r.normal > 0 && (
-                            <Badge variant="info" className="text-[10px] py-0">{formatHours(r.normal)} normal</Badge>
+                            <Badge variant="info" className="text-[11px] py-0">{formatHours(r.normal)} normal</Badge>
                           )}
                           {r.extra > 0 && (
-                            <Badge variant="warning" className="text-[10px] py-0">{formatHours(r.extra)} extra</Badge>
+                            <Badge variant="warning" className="text-[11px] py-0">{formatHours(r.extra)} extra</Badge>
                           )}
                           {r.vacaciones > 0 && (
-                            <Badge variant="success" className="text-[10px] py-0">{formatHours(r.vacaciones)} vac</Badge>
+                            <Badge variant="success" className="text-[11px] py-0">{formatHours(r.vacaciones)} vac</Badge>
                           )}
                         </div>
                       </div>

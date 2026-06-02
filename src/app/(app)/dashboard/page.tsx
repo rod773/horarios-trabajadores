@@ -85,25 +85,23 @@ export default async function DashboardPage() {
       <GsapParallax speed={0.15} className="relative -mx-3 sm:-mx-6 -mt-3 sm:-mt-6">
         <div className="px-3 sm:px-6 pt-3 sm:pt-6 pb-8 bg-gradient-to-br from-primary/5 via-background to-background border-b border-border">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-            <div>
+            <div className="min-w-0">
               <p className="text-sm text-muted-foreground mb-1">
                 {formatDate(new Date(), { weekday: "long", day: "numeric", month: "long" })}
               </p>
-              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight truncate">
                 Hola, {user.name.split(" ")[0]} 👋
               </h1>
-              <p className="text-sm text-muted-foreground mt-1">
+              <p className="text-sm text-muted-foreground mt-1 truncate">
                 {ROLE_LABELS[user.role]} · {user.team || "Sin equipo"}
               </p>
             </div>
-            <div className="flex flex-col items-end gap-1">
+            <div className="flex flex-col gap-1 w-full sm:w-64 sm:items-end">
               <span className="text-xs text-muted-foreground">Progreso semanal</span>
-              <div className="flex items-center gap-3 w-full sm:w-64">
-                <Progress value={progress} className="h-2" />
-                <span className="text-sm font-medium tabular-nums">
-                  {formatHours(totalHours)} / {formatHours(targetHours)}
-                </span>
-              </div>
+              <Progress value={progress} className="h-2" />
+              <span className="text-sm font-medium tabular-nums">
+                {formatHours(totalHours)} / {formatHours(targetHours)}
+              </span>
             </div>
           </div>
         </div>
