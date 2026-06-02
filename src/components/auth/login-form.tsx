@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
-import { Briefcase, Loader2, LogIn } from "lucide-react";
+import { Briefcase, Loader2, LogIn, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,14 +19,34 @@ const DEMO_ACCOUNTS = [
   { email: "maria@empresa.com", password: "worker123", label: "Trabajador" },
 ];
 
-export function LoginForm() {
+interface LoginFormProps {
+  captchaExpression: string;
+  captchaToken: string;
+}
+
+export function LoginForm({ captchaExpression: initialExpression, captchaToken: initialToken }: LoginFormProps) {
   const [pending, setPending] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  const [captchaExpression, setCaptchaExpression] = React.useState(initialExpression);
+  const [captchaToken, setCaptchaToken] = React.useState(initialToken);
 
   const form = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
-    defaultValues: { email: "", password: "" },
+    defaultValues: { email: "", password: "", captchaToken: initialToken, captchaAnswer: "" },
   });
+
+  async function refreshCaptcha() {
+    try {
+      const res = await fetch("/api/auth/captcha");
+      const data = await res.json();
+      setCaptchaExpression(data.expression);
+      setCaptchaToken(data.token);
+      form.setValue("captchaToken", data.token);
+      form.setValue("captchaAnswer", "");
+    } catch {
+      toast.error("Error al generar el captcha");
+    }
+  }
 
   async function onSubmit(values: LoginInput) {
     setPending(true);
@@ -34,11 +54,14 @@ export function LoginForm() {
     const fd = new FormData();
     fd.append("email", values.email);
     fd.append("password", values.password);
+    fd.append("captchaToken", values.captchaToken);
+    fd.append("captchaAnswer", values.captchaAnswer);
     const result = await loginAction(undefined, fd);
     if (result && "ok" in result && !result.ok) {
       setError(result.error);
       toast.error(result.error);
       setPending(false);
+      await refreshCaptcha();
     }
   }
 
@@ -103,6 +126,36 @@ export function LoginForm() {
                   <p className="text-xs text-destructive">{form.formState.errors.password.message}</p>
                 )}
               </div>
+
+              <div className="space-y-2">
+                <Label>Verificación de seguridad</Label>
+                <div className="flex items-center gap-2 rounded-lg border bg-muted/40 p-3">
+                  <span className="flex-1 font-mono text-lg font-bold tracking-wider select-none">
+                    {captchaExpression}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={refreshCaptcha}
+                    className="p-1.5 rounded-md hover:bg-accent transition-colors"
+                    title="Nuevo captcha"
+                  >
+                    <RefreshCw className="h-4 w-4 text-muted-foreground" />
+                  </button>
+                </div>
+                <Input
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="Escribe el resultado"
+                  {...form.register("captchaAnswer")}
+                  aria-invalid={!!form.formState.errors.captchaAnswer}
+                />
+                <input type="hidden" {...form.register("captchaToken")} />
+                {form.formState.errors.captchaAnswer && (
+                  <p className="text-xs text-destructive">{form.formState.errors.captchaAnswer.message}</p>
+                )}
+              </div>
+
               {error && (
                 <p className="text-sm text-destructive text-center" role="alert">
                   {error}

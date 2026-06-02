@@ -17,6 +17,7 @@ import type { AppSettings } from "@/lib/types";
 export function SettingsForm({ settings }: { settings: AppSettings }) {
   const [pending, setPending] = React.useState(false);
   const form = useForm<SettingsInput>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(settingsSchema) as any,
     defaultValues: {
       maxHorasPorDia: settings.maxHorasPorDia,

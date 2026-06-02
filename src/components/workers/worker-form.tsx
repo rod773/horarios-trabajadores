@@ -30,6 +30,7 @@ export function WorkerForm({
   const isEdit = !!worker;
 
   const form = useForm<WorkerFormInput>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(workerFormSchema) as any,
     defaultValues: {
       name: worker?.name ?? "",
@@ -71,9 +72,8 @@ export function WorkerForm({
   };
 
   return (
-    <form
-      onSubmit={form.handleSubmit(onSubmit as any)}
-      className="space-y-4"
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    <form onSubmit={form.handleSubmit(onSubmit as any)} className="space-y-4"
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">

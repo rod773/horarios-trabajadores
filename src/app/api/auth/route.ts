@@ -3,6 +3,7 @@ import { getCurrentUser } from "@/lib/session";
 import { verifyPassword } from "@/lib/data";
 import { loginSchema } from "@/lib/validations";
 import { login } from "@/lib/session";
+import { verifyCaptcha } from "@/lib/captcha";
 
 export async function POST(request: Request) {
   const body = await request.json().catch(() => ({}));
@@ -10,6 +11,11 @@ export async function POST(request: Request) {
   if (!parsed.success) {
     return NextResponse.json({ ok: false, error: "Datos inválidos" }, { status: 400 });
   }
+
+  if (!verifyCaptcha(parsed.data.captchaToken, parsed.data.captchaAnswer)) {
+    return NextResponse.json({ ok: false, error: "Captcha incorrecto" }, { status: 400 });
+  }
+
   const user = verifyPassword(parsed.data.email, parsed.data.password);
   if (!user) {
     return NextResponse.json({ ok: false, error: "Credenciales inválidas" }, { status: 401 });

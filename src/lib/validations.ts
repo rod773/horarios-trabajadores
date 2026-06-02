@@ -8,6 +8,8 @@ export const requestStatusSchema = z.enum(["PENDIENTE", "APROBADA", "RECHAZADA"]
 export const loginSchema = z.object({
   email: z.string().email("Email inválido"),
   password: z.string().min(1, "La contraseña es obligatoria"),
+  captchaToken: z.string().min(1, "Error de verificación"),
+  captchaAnswer: z.string().min(1, "Resuelve el captcha"),
 });
 
 export const workerFormSchema = z.object({

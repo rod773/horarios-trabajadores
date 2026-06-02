@@ -51,8 +51,15 @@ export async function loginAction(_prev: ActionResult | undefined, formData: For
   const parsed = loginSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
+    captchaToken: formData.get("captchaToken"),
+    captchaAnswer: formData.get("captchaAnswer"),
   });
   if (!parsed.success) return flatten(parsed.error);
+
+  const { verifyCaptcha } = await import("@/lib/captcha");
+  if (!verifyCaptcha(parsed.data.captchaToken, parsed.data.captchaAnswer)) {
+    return { ok: false, error: "Captcha incorrecto. Intenta de nuevo." };
+  }
 
   const user = verifyPassword(parsed.data.email, parsed.data.password);
   if (!user) {
