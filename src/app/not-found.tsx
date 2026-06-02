@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/ui/logo";
 
 export default function NotFound() {
   return (
     <div className="min-h-screen w-full grid place-items-center p-4">
-      <div className="text-center space-y-3 max-w-md">
+      <div className="text-center space-y-4 max-w-md">
+        <Logo size={64} className="mx-auto rounded-2xl shadow-md" />
         <p className="text-7xl font-bold tracking-tight text-primary">404</p>
         <h1 className="text-2xl font-semibold">Página no encontrada</h1>
         <p className="text-muted-foreground">

@@ -11,11 +11,11 @@ import {
   Users,
   FileBarChart,
   Settings,
-  Briefcase,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { logoutAction } from "@/app/actions";
+import { Logo } from "@/components/ui/logo";
 import type { Role } from "@/lib/types";
 
 interface NavItem {
@@ -46,9 +46,7 @@ export function Sidebar({ role, collapsed, onClose }: { role: Role; collapsed: b
       )}
     >
       <div className={cn("flex items-center gap-3 px-5 py-5 border-b border-border", collapsed && "justify-center px-2")}>
-        <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-primary to-primary/60 grid place-items-center text-primary-foreground shadow-sm">
-          <Briefcase className="h-5 w-5" />
-        </div>
+        <Logo size={36} className="rounded-lg shadow-sm" />
         {!collapsed && (
           <motion.div
             initial={{ opacity: 0, x: -8 }}

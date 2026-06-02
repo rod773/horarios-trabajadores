@@ -5,11 +5,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
-import { Briefcase, Loader2, LogIn, RefreshCw } from "lucide-react";
+import { Loader2, LogIn, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Logo } from "@/components/ui/logo";
 import { loginSchema, type LoginInput } from "@/lib/validations";
 import { loginAction } from "@/app/actions";
 
@@ -93,9 +94,9 @@ export function LoginForm({ captchaExpression: initialExpression, captchaToken: 
               initial={{ scale: 0.6, rotate: -10 }}
               animate={{ scale: 1, rotate: 0 }}
               transition={{ delay: 0.1, type: "spring", stiffness: 200 }}
-              className="mx-auto h-14 w-14 rounded-2xl bg-gradient-to-br from-primary to-primary/60 grid place-items-center text-primary-foreground shadow-lg"
+              className="mx-auto"
             >
-              <Briefcase className="h-7 w-7" />
+              <Logo size={56} className="rounded-2xl shadow-lg" />
             </motion.div>
             <div>
               <CardTitle className="text-2xl">Bienvenido de vuelta</CardTitle>

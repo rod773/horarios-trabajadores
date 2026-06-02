@@ -16,6 +16,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Horarios · Gestión de turnos",
   description: "Aplicación de gestión de horarios de trabajadores",
+  icons: {
+    icon: [{ url: "/logo.svg", type: "image/svg+xml" }],
+    shortcut: "/logo.svg",
+    apple: "/logo.svg",
+  },
 };
 
 export default function RootLayout({
