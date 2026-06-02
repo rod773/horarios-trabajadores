@@ -17,6 +17,91 @@ Aplicación web para gestionar los horarios y turnos de los trabajadores, constr
 
 > Para esta demo se incluye un **store en memoria** (`src/lib/data.ts`) con seed automático al iniciar la app, lo que evita depender de un servidor de base de datos PostgreSQL. El esquema Prisma está incluido y es compatible con el switch a PostgreSQL cambiando el `provider` y la `DATABASE_URL`.
 
+## Funcionamiento
+
+### Arquitectura general
+
+La aplicación sigue el modelo **Server Components + Client Components** de Next.js 16 App Router:
+
+- **Server Components** (por defecto en `app/`): obtienen datos del store, verifican autenticación y renderizan HTML. Ej: `dashboard/page.tsx`, `horarios/page.tsx`.
+- **Client Components** (`"use client"`): manejan interactividad, estado local (React hooks), animaciones y envío de formularios. Ej: `WeekScheduleView`, `WorkersTable`, `RequestForm`.
+- La comunicación entre ambos lados ocurre mediante **Server Actions** (`actions.ts`), que son funciones asíncronas ejecutadas en el servidor pero invocadas desde el cliente.
+
+### Flujo de autenticación
+
+```
+Login (email+password)
+  → verifyPassword() busca en store en memoria
+  → login() establece cookie httpOnly "app_session" con userId
+  → redirect("/dashboard")
+
+Layout protegido (app)/(app)/layout.tsx
+  → getCurrentUser() lee la cookie y busca el User en el store
+  → Si no hay cookie → redirect("/login")
+  → Si hay cookie → renderiza AppShell con datos del usuario
+
+Logout
+  → logoutAction() elimina la cookie → redirect("/login")
+```
+
+Cada página dentro de `(app)/` puede hacer verificaciones adicionales de rol:
+- `trabajadores/page.tsx` redirige si `user.role === "WORKER"`
+- `configuracion/page.tsx` redirige si `user.role !== "ADMIN"`
+
+El **Sidebar** también filera los enlaces visibles según el rol del usuario.
+
+### Almacenamiento en memoria
+
+No se requiere base de datos. Los datos viven en `globalThis.__APP_DATA__`:
+
+```
+globalThis.__APP_DATA__ = {
+  users: User[]           // 8 usuarios semilla
+  shifts: Shift[]         // 20 turnos para la semana actual
+  requests: ShiftRequest[]// 1 solicitud pendiente
+  auditLogs: AuditLog[]
+  settings: AppSettings   // límites configurables
+  passwords: Record<string, string>
+  seq: number             // contador autoincremental para IDs
+}
+```
+
+- Al arrancar la app por primera vez, `getStore()` ejecuta `buildSeed()`, que genera la semana actual dinámicamente (toma el lunes de esta semana y crea turnos a partir de esa fecha).
+- Los datos persisten mientras el servidor esté activo. Al detener el servidor (`Ctrl+C`) se pierden y se regeneran al reiniciar.
+- Para resetear los datos sin reiniciar: no hay un botón en la UI, pero existe `resetData()` en `data.ts`.
+- El esquema Prisma (`prisma/schema.prisma`) está listo para migrar a PostgreSQL cuando se desee.
+
+### Flujo de datos (CRUD)
+
+```
+Cliente (formulario)
+  → Server Action (actions.ts)
+    → Valida con Zod (safeParse)
+    → Operación en store (createUser, updateShift, resolveRequest, etc.)
+    → addAuditLog() para trazabilidad
+    → revalidatePath() para refrescar datos del servidor
+    → Retorna { ok: true } o { ok: false, error }
+  → Cliente recibe respuesta
+    → toast.success() o toast.error()
+    → router.refresh() para actualizar la UI
+```
+
+### Sistema de roles
+
+| Rol         | Dashboard | Trabajadores | Horarios | Solicitudes | Reportes | Configuración |
+|-------------|-----------|--------------|----------|-------------|----------|---------------|
+| ADMIN       | ✅        | ✅ CRUD      | ✅ CRUD  | ✅ aprueba  | ✅       | ✅            |
+| SUPERVISOR  | ✅        | ✅ CRUD      | ✅ CRUD  | ✅ aprueba  | ✅       | ❌            |
+| WORKER      | ✅ propio | ❌           | ✅ ver   | ✅ envía    | ❌       | ❌            |
+
+### Decisiones técnicas importantes
+
+- **Zod 4 + @hookform/resolvers**: conviven con `as any` en el resolver (`zodResolver()`), necesario porque `@hookform/resolvers` v5 está diseñado para Zod 3. No afecta la validación.
+- **ScrollReveal.js** (v4.0.9): no tiene tipos TypeScript ni export ESM. Se importa como `import ScrollReveal from "scrollreveal"` y funciona por la configuración `skipLibCheck: true` en `tsconfig.json`.
+- **next/headers cookies()**: en Next.js 16 es asíncrono (`const store = await cookies()`). Todas las funciones de `session.ts` ya lo manejan así.
+- **searchParams**: en Next.js 16, `searchParams` es una Promise (`Promise<{ ... }>`). Se debe `await` antes de acceder a sus propiedades.
+- **RevalidatePath vs router.refresh()**: las Server Actions usan `revalidatePath()` para refrescar datos en el servidor. Los componentes cliente llaman `router.refresh()` después de una acción exitosa para sincronizar la UI.
+
 ## Requisitos
 
 - Node.js **20.9+**
